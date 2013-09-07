@@ -1,0 +1,21 @@
+# npm
+node_modules
+npm-debug.log
+
+# OS
+.DS_STORE
+
+# IDE
+*#
+*~
+.idea
+nbproject
+
+# Ignore temporary files
+.tmp
+
+# wtf
+*.swo
+*.swp
+*.swn
+*.swm

@@ -1,0 +1,24 @@
+{
+  "name": "node-deezer",
+  "version": "0.0.0",
+  "description": "Unofficial Node.js wrapper for the Deezer API",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mikermcneil/node-deezer.git"
+  },
+  "keywords": [
+    "deezer",
+    "api"
+  ],
+  "author": "Mike McNeil",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "gitHead": "3dbcd0587361844b0f10d4974872d392e14fb416",
+  "dependencies": {
+    "request": "~2.27.0"
+  }
+}
