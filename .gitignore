@@ -19,3 +19,6 @@ nbproject
 *.swp
 *.swn
 *.swm
+
+# ignore deezer credentials
+examples/with_express/deezerCredentials.js
