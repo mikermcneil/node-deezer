@@ -124,12 +124,16 @@ if (!code) {
 
 ## To run the Express example
 
-1) Create your app on developers.deezer.com
-	+ Set application domain to `localhost` for now, and make sure and copy down your `Application ID` and `Secret Key`
-2) Copy `deezerCredentials.ex.js` to `deezerCredentials.js`
-3) Then change the app secret and app id in `deezerCredentials.js` to your app's credentials from developers.deezer.com
-4) `npm install`
-5) `node app.js`
+(1) Create your app on developers.deezer.com
+  + Set application domain to `localhost` for now, and make sure and copy down your `Application ID` and `Secret Key`
+
+(2) Copy `deezerCredentials.ex.js` to `deezerCredentials.js`
+
+(3) Then change the app secret and app id in `deezerCredentials.js` to your app's credentials from developers.deezer.com
+
+(4) `npm install`
+
+(5) `node app.js`
 
 
 
