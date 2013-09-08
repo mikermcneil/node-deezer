@@ -53,7 +53,7 @@ if (!code) {
     // e.g. search for artists with names containing the phrase 'empire'
     deezer.request(result.accessToken,
     {
-      resource: 'search/artist,
+      resource: 'search/artist',
       method: 'get',
       fields: { q: 'empire' }
     },
