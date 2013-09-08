@@ -14,6 +14,11 @@ Unofficial Node.js wrapper for the Deezer API
 5) `node app.js`
 
 
+## To run tests
+`npm test`
+
+
+
 <!--
 ## How To Build a Deezer App
 
