@@ -6,7 +6,8 @@ var request			= require('request'),
 	_				= require('lodash'),
 	Err				= require('./errors'),
 	querystringify	= require('querystring').stringify,
-	toCSV			= require('./util/toCSV');
+	toCSV			= require('./util/toCSV'),
+	isHTTPMethod	= require('./util/isHTTPMethod');
 
 
 
@@ -20,15 +21,73 @@ module.exports = {
 
 
 	/**
-	 * Send an API request to Deezer
+	 * Send an arbitrary API request to Deezer
 	 *
-	 * @param {String} accessToken		(the OAuth token representing a user's session)
+	 * @param {String} accessToken			(the OAuth token representing a user's session)
+	 * @param {Object} options
+	 *		resource {String}				(the string name of resource, e.g. 'album')
+	 *		method {HTTPMethod|undefined}	(the REST method [defaults to 'get'])
 	 * @param {Function} cb
 	 *		@param {Error|null} err
 	 */
 
-	request: function () {
-		// TODO: stub
+	request: function (accessToken, options, cb) {
+
+
+		if ( typeof accessToken !== 'string' ) {
+			throw Err.invalidArgument('accessToken', accessToken, ['string']);
+		}
+		if ( !_.isPlainObject(options) ) {
+			throw Err.invalidArgument('options', options, ['object']);
+		}
+		if ( !_.isFunction(cb) ) {
+			throw Err.invalidArgument('cb', cb, ['Function']);
+		}
+		if ( typeof options.resource !== 'string' ) {
+			throw Err.invalidArgument('options.resource', options.resource, ['string']);
+		}
+
+		// Default to HTTP GET and ensure that it is lowercased
+		if ( !isHttpVerb(options.method) ) {
+			options.method = 'get';
+		}
+		options.method = options.method.toLowerCase();
+
+
+		// Communicate w/ Deezer
+		request({
+			url		: this.endpoints.resource + '/' + options.resource,
+			method	: options.method,
+			qs		: {
+				app_id	: appId,
+				secret	: secret,
+				code	: code
+			}
+		}, function createSessionResponse (err, r, body) {
+
+			// Handle non-200 status codes & unexpected results
+			if (err) return cb(err);
+			var status = r.statusCode;
+			if (status !== 200 && body) return cb(body);
+			if (!body) return cb(Err.unknownResponseFromDeezer(r));
+			// NOTE: When an error API is documented for Deezer OAuth API calls,
+			// a more structured/semantic error response should be implemented here
+
+			// Attempt to parse response body as form values
+			// (see example here: http://developers.deezer.com/api/oauth)			
+			var parsedResponse = querystring.parse(body);
+			if (!parsedResponse.access_token) return cb(body);
+			
+			// Cast `expires` result to either `false` or a natural number ( > 0 )
+			// i.e. we'll allow the `expires` value to be missing from the response,
+			// but we assume that means the token *never* expires!
+			if (!parsedResponse.expires) parsedResponse.expires = false;
+			// NOTE: `expires` represents the number of seconds remaining before 
+			// the access token expires
+			
+			// Send back parsed response
+			cb(null, parsedResponse);
+		});
 	}
 
 };

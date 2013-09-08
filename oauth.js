@@ -100,7 +100,7 @@ module.exports = {
 				secret	: secret,
 				code	: code
 			}
-		}, function (err, r, body) {
+		}, function createSessionResponse (err, r, body) {
 
 			// Handle non-200 status codes & unexpected results
 			if (err) return cb(err);
@@ -119,6 +119,8 @@ module.exports = {
 			// i.e. we'll allow the `expires` value to be missing from the response,
 			// but we assume that means the token *never* expires!
 			if (!parsedResponse.expires) parsedResponse.expires = false;
+			// NOTE: `expires` represents the number of seconds remaining before 
+			// the access token expires
 			
 			// Send back parsed response
 			cb(null, parsedResponse);
