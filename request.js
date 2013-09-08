@@ -4,9 +4,8 @@
 
 var request			= require('request'),
 	_				= require('lodash'),
-	querystringify	= require('querystring').stringify,
 	Err				= require('./errors'),
-	affordances		= require('./affordances'),
+	querystringify	= require('querystring').stringify,
 	toCSV			= require('./util/toCSV');
 
 
