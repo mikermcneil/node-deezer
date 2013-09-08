@@ -3,9 +3,11 @@
  */
 
 var request		= require('request'),
-	util		= require('util'),
 	Err			= require('./errors'),
 	affordances	= require('./affordances');
+
+
+
 
 
 
@@ -44,8 +46,11 @@ function DZ () {
 	 */
 
 	this.getLoginUrl = function (appId, callbackUrl) {
-		if ( typeof appId !== 'string' && typeof appId !== 'integer' ) {
-			throw Err.invalidArgument('appId', appId, ['string', 'integer']);
+		if ( typeof appId !== 'string' && typeof appId !== 'number' ) {
+			throw Err.invalidArgument('appId', appId, ['string', 'number']);
+		}
+		if ( typeof callbackUrl !== 'string' ) {
+			throw Err.invalidArgument('callbackUrl', callbackUrl, ['string']);
 		}
 		return this.authenticationUrl + '/';
 	};

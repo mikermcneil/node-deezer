@@ -1,4 +1,14 @@
 /**
+ * Module dependencies
+ */
+
+var util		= require('util');
+
+
+
+
+
+/**
  * Module-wide errors
  */
 
@@ -21,7 +31,8 @@ module.exports = {
 		return new Error ('\n' + 
 			'Invalid argument (`' + argName + '`) :: \n' +
 			'Expected one of: ' + util.inspect(expectedTypes) + '\n' +
-			'But instead got: ' + util.inspect(actualValue) );
+			'But instead got: ' + util.inspect(actualValue) + '\n' +
+			'whose type is: ' + typeof(actualValue) );
 	}
 
 };
