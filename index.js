@@ -2,35 +2,22 @@
  * Module dependencies
  */
 
-var request	= require('request'),
-	util	= require('util');
+var request		= require('request'),
+	util		= require('util'),
+	Err			= require('./errors'),
+	affordances	= require('./affordances');
 
 
 
 /**
- * Module errors
- */
-
-var errors = require('./errors');
-
-
-
-
-// todo: clarify whether there's an api version
-
-// docs, for reference: http://developers.deezer.com/api
-// oh good there's jsonp!
-
-// API Explorer:
-// http://developers.deezer.com/api/explorer
-
-
-/**
- * Expose public API to module users
+ * Core DZ object which wraps calls to the Deezer API
+ * 
  *
- * > Note that the usage is explicitly different from the client-side
- * > JavaScript SDK to avoid the confusion ofttimes associated with
- * > Node.js libraries which come after their client-side counterparts.
+ * Deezer REST API docs: (for reference)
+ * http://developers.deezer.com/api
+ *
+ * API Explorer:
+ * http://developers.deezer.com/api/explorer
  */
 
 function DZ () {
@@ -58,7 +45,7 @@ function DZ () {
 
 	this.getLoginUrl = function (appId, callbackUrl) {
 		if ( typeof appId !== 'string' && typeof appId !== 'integer' ) {
-			throw errors.invalidArgument('appId', appId, ['string', 'integer']);
+			throw Err.invalidArgument('appId', appId, ['string', 'integer']);
 		}
 		return this.authenticationUrl + '/';
 	};
@@ -148,43 +135,7 @@ function DZ () {
 
 
 
-
-	// Compatibility / warnings:
-	// 
-	// Note: Methods in the JavaScript SDK are covered here w/ 
-	// explicit errors to avoid confusion about what's possible from
-	// the server.
-	this.init = function () {
-		throw errors.notCompatible('init');
-	};
-	this.login = function () {
-		throw errors.notCompatible('login');
-	};
-	this.logout = function () {
-		throw errors.notCompatible('logout');
-	};
-	this.getLoginStatus = function () {
-		throw errors.notCompatible('getLoginStatus');
-	};
-	this.api = function () {
-		throw errors.notCompatible('api');
-	};
-
-
-	function playerNotCompatible () {
-		throw errors.notCompatible('player');
-	}
-	this.player = playerNotCompatible;
-	this.player.playTracks = playerNotCompatible;
-	this.player.playAlbum = playerNotCompatible;
-	this.player.playPlaylist = playerNotCompatible;
-	this.player.playRadio = playerNotCompatible;
-	this.player.playSmartRadio = playerNotCompatible;
-	this.Event = {
-		subscribe: function () {
-			throw errors.notCompatible('Event.subscribe');
-		}
-	};
 }
 
 module.exports = DZ;
+
