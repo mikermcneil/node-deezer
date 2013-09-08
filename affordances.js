@@ -37,16 +37,24 @@ module.exports = function ensureProperUsage () {
 		throw Err.notCompatible('api');
 	};
 
-
 	function playerNotCompatible() {
 		throw Err.notCompatible('player');
 	}
 	this.player = playerNotCompatible;
+
+	this.player.play = playerNotCompatible;
+	this.player.pause = playerNotCompatible;
+	this.player.next = playerNotCompatible;
+	this.player.prev = playerNotCompatible;
+	this.player.setVolume = playerNotCompatible;
+	this.player.seek = playerNotCompatible;
+
 	this.player.playTracks = playerNotCompatible;
 	this.player.playAlbum = playerNotCompatible;
 	this.player.playPlaylist = playerNotCompatible;
 	this.player.playRadio = playerNotCompatible;
 	this.player.playSmartRadio = playerNotCompatible;
+
 	this.Event = {
 		subscribe: function() {
 			throw Err.notCompatible('Event.subscribe');
