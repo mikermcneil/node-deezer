@@ -29,7 +29,7 @@ describe('deezer#getLoginUrl()', function() {
 				check(loginUrl).isUrl();
 			});
 			assert.doesNotThrow(function () {
-				var loginUrl = deezer.getLoginUrl(1234, 'zz?localhost');
+				var loginUrl = deezer.getLoginUrl(1234, 'zz&!&AG??localhos  wgeee gat');
 				check(loginUrl).isUrl();
 			});
 		});
