@@ -2,7 +2,8 @@
  * Module dependencies
  */
 
-var request = require('request');
+var request	= require('request'),
+	util	= require('util');
 
 
 
@@ -13,14 +14,23 @@ var request = require('request');
 var errors = {
 
 	notCompatible: function (methodName) {
-		return new Error('This method (`' + methodName + '`) ' +
+		return new Error('\n' + 
+			'This method (`' + methodName + '`) ' +
 			'cannot be used on the server by Node.js.'
 		);
 	},
 
 	notYetSupported: function (methodName) {
-		return new Error ('The method (`' + methodName + '`) is ' + 
+		return new Error ('\n' +
+			'The method (`' + methodName + '`) is ' + 
 			'not yet supported by the Deezer API.');
+	},
+
+	invalidArgument: function (argName, actualValue, expectedTypes) {
+		return new Error ('\n' + 
+			'Invalid argument (`' + argName + '`) :: \n' +
+			'Expected one of: ' + util.inspect(expectedTypes) + '\n' +
+			'But instead got: ' + util.inspect(actualValue) );
 	}
 
 };
@@ -68,7 +78,10 @@ function DZ () {
 	 *		in your Deezer developer portal at: http://developers.deezer.com/myapps
 	 */
 
-	this.getLoginUrl = function () {
+	this.getLoginUrl = function (appId, callbackUrl) {
+		if ( typeof appId !== 'string' && typeof appId !== 'integer' ) {
+			throw errors.invalidArgument('appId', appId, ['string', 'integer']);
+		}
 		return this.authenticationUrl + '/';
 	};
 

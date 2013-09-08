@@ -15,25 +15,21 @@ var DZ = require('../');
 var deezer = new DZ();
 
 
-describe('sanity', function() {
-	it('a = a', function () {
-		assert.throws(function () {
-			throw new Error('All is right and well in the world.');
+
+describe('deezer', function() {
+
+	describe('#getLoginUrl()', function() {
+
+		it('should throw when appId is not present', function() {
+			assert.throws(function() {
+				deezer.getLoginUrl();
+			});
 		});
+
+		it('should not throw when required arguments are present', function () {
+			deezer.getLoginUrl('ag94jad', 'http://localhost');
+		});
+
 	});
+
 });
-
-
-// describe('deezer', function() {
-
-// 	describe('#getLoginUrl()', function() {
-
-// 		it('should throw when appId is not present', function() {
-// 			assert.throws(function() {
-				
-// 			});
-// 		});
-
-// 	});
-
-// });
