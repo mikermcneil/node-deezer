@@ -115,15 +115,18 @@ module.exports = {
 			var parsedResponse = querystring.parse(body);
 			if (!parsedResponse.access_token) return cb(body);
 			
-			// Cast `expires` result to either `false` or a natural number ( > 0 )
+			// Cast `expires` result to either `0` or a natural number ( > 0 )
 			// i.e. we'll allow the `expires` value to be missing from the response,
 			// but we assume that means the token *never* expires!
-			if (!parsedResponse.expires) parsedResponse.expires = false;
+			if (!parsedResponse.expires) parsedResponse.expires = 0;
 			// NOTE: `expires` represents the number of seconds remaining before 
 			// the access token expires
 			
 			// Send back parsed response
-			cb(null, parsedResponse);
+			cb(null, {
+				accessToken	: parsedResponse.access_token,
+				expires		: parsedResponse.expires
+			});
 		});
 	},
 	
