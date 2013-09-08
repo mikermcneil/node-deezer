@@ -2,7 +2,8 @@
  * Module dependencies
  */
 
-var assert = require('assert');
+var assert	= require('assert'),
+	check	= require('validator').check;
 
 
 
@@ -18,45 +19,55 @@ var deezer = new DZ();
 
 
 
+describe('deezer#getLoginUrl()', function() {
 
+	describe('proper return value', function() {
 
-
-describe('deezer', function() {
-
-	describe('#getLoginUrl()', function() {
-
-		describe('proper behavior for invalid input', function() {
-
-			it('should throw when appId is invalid or not present', function() {
-				assert.throws(function() {
-					deezer.getLoginUrl();
-				});
-				assert.throws(function() {
-					deezer.getLoginUrl( {} );
-				});
-				assert.throws(function() {
-					deezer.getLoginUrl( [] );
-				});
-				assert.throws(function() {
-					deezer.getLoginUrl( function bigNastyWrongThing() {} );
-				});
+		it('should return a valid url', function () {
+			assert.doesNotThrow(function () {
+				var loginUrl = deezer.getLoginUrl(1234, 'localhost');
+				check(loginUrl).isUrl();
 			});
-
-			it('should throw when callbackUrl is invalid or not present', function() {
-				assert.throws(function() {
-					deezer.getLoginUrl(1234);
-				});
-				assert.throws(function() {
-					deezer.getLoginUrl(1234, function bigNastyWrongThing () {} );
-				});
+			assert.doesNotThrow(function () {
+				var loginUrl = deezer.getLoginUrl(1234, 'zz?localhost');
+				check(loginUrl).isUrl();
 			});
-
-			it('should not throw when required arguments are present and valid', function () {
-				deezer.getLoginUrl(2349284, 'http://localhost');
-				deezer.getLoginUrl('2z49h4a--DA  FHIˆ øøîüïø284', 'http://jello.com/foo?jiggliness=32');
-			});
-
 		});
 
 	});
+
+
+	describe('proper behavior for invalid input', function() {
+
+		it('should throw when appId is invalid or not present', function() {
+			assert.throws(function() {
+				deezer.getLoginUrl();
+			});
+			assert.throws(function() {
+				deezer.getLoginUrl( {} );
+			});
+			assert.throws(function() {
+				deezer.getLoginUrl( [] );
+			});
+			assert.throws(function() {
+				deezer.getLoginUrl( function bigNastyWrongThing() {} );
+			});
+		});
+
+		it('should throw when callbackUrl is invalid or not present', function() {
+			assert.throws(function() {
+				deezer.getLoginUrl(1234);
+			});
+			assert.throws(function() {
+				deezer.getLoginUrl(1234, function bigNastyWrongThing () {} );
+			});
+		});
+
+		it('should not throw when required arguments are present and valid', function () {
+			deezer.getLoginUrl(2349284, 'http://localhost');
+			deezer.getLoginUrl('2z49h4a--DA  FHIˆ øøîüïø284', 'http://jello.com/foo?jiggliness=32');
+		});
+	});
+
+
 });

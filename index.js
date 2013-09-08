@@ -2,11 +2,12 @@
  * Module dependencies
  */
 
-var request		= require('request'),
-	_			= require('lodash'),
-	Err			= require('./errors'),
-	affordances	= require('./affordances'),
-	toCSV		= require('./util/toCSV');
+var request			= require('request'),
+	_				= require('lodash'),
+	querystringify	= require('querystring').stringify,
+	Err				= require('./errors'),
+	affordances		= require('./affordances'),
+	toCSV			= require('./util/toCSV');
 
 
 
@@ -42,19 +43,19 @@ function DZ () {
 	 * Get the authentication url where your user should be redirected
 	 *
 	 * @param {String} appId			(your Deezer application id from the Deezer developer portal)
-	 * @param {String} callbackUrl		(URL which will handle the user's code from Deezer)
+	 * @param {String} redirectUrl		(URL which will handle the user's code from Deezer)
 	 * @param {Array|undefined} perms	(requested permissions [optional])
 	 *
-	 * NOTE: `callbackUrl` must be within the 'Application domain' specified for this app 
+	 * NOTE: `redirectUrl` must be within the 'Application domain' specified for this app 
 	 * in your Deezer developer portal at: http://developers.deezer.com/myapps
 	 */
 
-	this.getLoginUrl = function (appId, callbackUrl, perms) {
+	this.getLoginUrl = function (appId, redirectUrl, perms) {
 		if ( typeof appId !== 'string' && typeof appId !== 'number' ) {
 			throw Err.invalidArgument('appId', appId, ['string', 'number']);
 		}
-		if ( typeof callbackUrl !== 'string' ) {
-			throw Err.invalidArgument('callbackUrl', callbackUrl, ['string']);
+		if ( typeof redirectUrl !== 'string' ) {
+			throw Err.invalidArgument('redirectUrl', redirectUrl, ['string']);
 		}
 		if ( !_.isArray(perms) && typeof perms !== 'undefined' ) {
 			throw Err.invalidArgument('perms', perms, ['Array', 'undefined']);
@@ -64,12 +65,15 @@ function DZ () {
 		// (Deezer does this under the covers anyway)
 		if (!perms) perms = ['basic_access'];
 
-		// Reduce `perms` into a CSV
-		toCSV(perms);
+		// Reduce `perms` into a comma-separated-value string
+		perms = toCSV(perms);
 
-
-		// ?app_id=YOUR_APP_ID&redirect_uri=YOUR_REDIRECT_URI&perms=basic_access,email
-		return this.authenticationUrl + '/' ;
+		return this.authenticationUrl +
+			'?' + querystringify({
+				app_id: appId,
+				redirect_uri: redirectUrl,
+				perms: perms
+			});
 	};
 
 

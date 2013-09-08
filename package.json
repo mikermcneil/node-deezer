@@ -21,5 +21,8 @@
   "dependencies": {
     "request": "~2.27.0",
     "lodash": "~1.3.1"
+  },
+  "devDependencies": {
+    "validator": "~1.5.1"
   }
 }
