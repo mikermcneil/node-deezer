@@ -46,24 +46,47 @@ module.exports = {
 		if ( typeof options.resource !== 'string' ) {
 			throw Err.invalidArgument('options.resource', options.resource, ['string']);
 		}
+		if ( !_.isPlainObject(options.fields) || typeof options.fields !== 'undefined' ) {
+			throw Err.invalidArgument('options.fields', options.fields, ['object', 'undefined']);
+		}
 
-		// Default to HTTP GET and ensure that it is lowercased
+		// Default `options.fields` to {}
+		if ( typeof options.fields !== 'undefined' ) {
+			options.fields = {};
+		}
+
+		// Default `options.method` to HTTP GET and ensure that it is lowercased
 		if ( !isHttpVerb(options.method) ) {
 			options.method = 'get';
 		}
 		options.method = options.method.toLowerCase();
 
 
-		// Communicate w/ Deezer
-		request({
+		// Build request
+		var apiRequest = {
 			url		: this.endpoints.resource + '/' + options.resource,
-			method	: options.method,
-			qs		: {
-				app_id	: appId,
-				secret	: secret,
-				code	: code
-			}
-		}, function createSessionResponse (err, r, body) {
+			method	: options.method
+		};
+
+		// Use different field encoding depending on HTTP method
+		if (options.method === 'get') paramEncoding = 'qs';
+
+		// Currently, all API methods expect fields in the query string
+		else paramEncoding = 'qs';
+
+		// For reference, in case of API change:
+		// [One of: 'form', 'json', 'qs', or 'body']
+		// if 'body', fields must be encoded into a string or buffer beforehand
+		// else if (options.method === 'post') paramEncoding = 'form';
+		// else if (options.method === 'put') paramEncoding = 'form';
+		// else if (options.method === 'delete') paramEncoding = 'form';
+
+		// Build field set
+		apiRequest[paramEncoding] = options.fields;
+
+
+		// Communicate w/ Deezer
+		request(apiRequest, function createSessionResponse (err, r, body) {
 
 			// Handle non-200 status codes & unexpected results
 			if (err) return cb(err);
