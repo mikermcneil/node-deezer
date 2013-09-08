@@ -46,7 +46,7 @@ module.exports = {
 		if ( typeof options.resource !== 'string' ) {
 			throw Err.invalidArgument('options.resource', options.resource, ['string']);
 		}
-		if ( !_.isPlainObject(options.fields) || typeof options.fields !== 'undefined' ) {
+		if ( !_.isPlainObject(options.fields) && typeof options.fields !== 'undefined' ) {
 			throw Err.invalidArgument('options.fields', options.fields, ['object', 'undefined']);
 		}
 
