@@ -1,0 +1,8 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+
+  p follow this link to allow this example app to access your Deezer account:
+  a(href='#{authLink}') #{authLink}
