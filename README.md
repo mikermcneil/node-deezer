@@ -3,8 +3,15 @@ node-deezer
 
 Unofficial Node.js wrapper for the Deezer API
 
+## Installation
+First, install the npm module:
+`npm install node-deezer`
 
-## Quickstart
+## Hello Deezer
+
+Here's a quick example to get you started:
+
+> For more, clone this repo and try out the [Express example](https://github.com/mikermcneil/node-deezer/tree/master/examples/with_express).
 
 ```javascript
 // Instantiate library (can be global or instantiated in separate places-- either way is fine)
@@ -67,6 +74,8 @@ if (!code) {
 
 ```
 
+
+
 ## Methods
 
 #### getLoginUrl
@@ -124,18 +133,50 @@ if (!code) {
 
 ## To run the Express example
 
-1) Create your app on developers.deezer.com
-	+ Set application domain to `localhost` for now, and make sure and copy down your `Application ID` and `Secret Key`
-2) Copy `deezerCredentials.ex.js` to `deezerCredentials.js`
-3) Then change the app secret and app id in `deezerCredentials.js` to your app's credentials from developers.deezer.com
-4) `npm install`
-5) `node app.js`
+(1) Create your app on developers.deezer.com
+  + Set application domain to `localhost` for now, and make sure and copy down your `Application ID` and `Secret Key`
+
+(2) Copy `deezerCredentials.ex.js` to `deezerCredentials.js`
+
+(3) Then change the app secret and app id in `deezerCredentials.js` to your app's credentials from developers.deezer.com
+
+(4) `npm install`
+
+(5) `node app.js`
 
 
 
 
 ## To run tests
 `npm test`
+
+
+
+## License
+
+The MIT License (MIT)
+
+Copyright (c) 2013 Mike McNeil
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+https://github.com/mikermcneil/node-deezer/blob/master/LICENSE
+
 
 
 
