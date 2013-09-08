@@ -46,6 +46,9 @@ if (!code) {
   
     // Otherwise, everything is cool and we have the access token and lifespan (`expires`) in `result`
     console.log(result);
+  });
+}
+
 ```
 
 ## Methods
