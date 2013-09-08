@@ -5,7 +5,16 @@ Unofficial Node.js wrapper for the Deezer API
 
 ## Installation
 First, install the npm module:
+
 `npm install node-deezer`
+
+
+## Create your app on developers.deezer.com
+
+First, make sure you have a Deezer account.  Then go to http://developers.deezer.com/myapps and create a new application.
+
+Grab your "Application ID" and "Secret Key"-- you'll need them below.
+
 
 ## Hello Deezer
 
@@ -21,6 +30,7 @@ var deezer = new DZ();
 // Now use node-deezer to generate the the link where you can redirect
 // your users to allow your app to access her/his Deezer account
 var appId = '28325'; // from developers.deezer.com
+var appSecret = 'd92aeb22424492c2828b'; // from developers.deezer.com
 var redirectUrl = 'http://localhost:3000/deezerCallback'; // somewhere in your app, see below
 var loginUrl = deezer.getLoginUrl(appId, redirectUrl);
 
@@ -130,6 +140,10 @@ if (!code) {
 	 */
 	deezer.request(accessToken, options, cb);
 ```
+
+For a list of available API methods, check out http://developers.deezer.com/api
+
+
 
 ## To run the Express example
 
