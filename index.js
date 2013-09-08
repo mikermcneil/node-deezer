@@ -70,7 +70,6 @@ function DZ () {
 
 	this.getLoginUrl = function () {
 		return this.authenticationUrl + '/';
-		// TODO: stub
 	};
 
 
@@ -179,10 +178,12 @@ function DZ () {
 	this.api = function () {
 		throw errors.notCompatible('api');
 	};
-	this.player = function playerNotCompatible () {
-		throw errors.notCompatible('player');
-	};
 
+
+	function playerNotCompatible () {
+		throw errors.notCompatible('player');
+	}
+	this.player = playerNotCompatible;
 	this.player.playTracks = playerNotCompatible;
 	this.player.playAlbum = playerNotCompatible;
 	this.player.playPlaylist = playerNotCompatible;
