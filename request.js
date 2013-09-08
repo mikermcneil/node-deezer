@@ -112,11 +112,16 @@ module.exports = {
 					return cb(null, parsedResponse);
 				}
 
+				// For now, pass Deezer's response straight through
+				// since there are too many different kinds of responses
+				// to explicitly enumerate them
+				return cb(null, parsedResponse);
+
 				// If deezer sent json, but it's in an unexpected format
-				return cb(
-					'Deezer sent an unexpected JSON response :: ' + '\n' +
-					util.inspect(body, false, 4)
-				);
+				// return cb(
+				// 	'Deezer sent an unexpected JSON response :: ' + '\n' +
+				// 	util.inspect(body, false, 4)
+				// );
 			}
 			// if deezer sent invalid json
 			catch (e) {

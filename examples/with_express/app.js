@@ -67,9 +67,12 @@ app.get('/deezer/:resource/:id?', function (req,res,next) {
 	// Quick implementation of resourceful routing,
 	// just to simplify the demo
 	var resource = req.param('resource');
-	if (!resource) res.redirect('/dashboard');
-	if (!deezerApiRoutes[resource]) res.redirect('/dashboard');
+	if (!resource) return res.redirect('/dashboard');
+	if (!deezerApiRoutes[resource]) return next();
 	deezerApiRoutes[resource](req,res,next);
+});
+app.get('/deezer/*', function (req, res, next) {
+	deezerApiRoutes.wildcard(req,res,next);
 });
 
 

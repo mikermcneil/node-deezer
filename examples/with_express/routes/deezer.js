@@ -25,15 +25,46 @@ var deezer = new DZ();
 module.exports = {
 
 
-	me: function(req, res, next) {
-		deezer.request(req.session.deezer.token, {
-			resource: 'user/me',
-			method: 'get'
-		}, function (err, result) {
+	/**
+	 * Handle any arbitrary Deezer API method
+	 */
+
+	wildcard: function (req, res, next) {
+		var path = req.params[0];
+
+		console.log(
+			'Debug:: Raw request to Deezer API','\n',
+			'Path :: ', path,'\n',
+			'Fields :: ', req.query
+		);
+
+		deezer.request(req.session.deezer.token,
+		{
+			resource: path,
+			method: 'get',
+			fields: req.query
+		},
+		function done (err, result) {
 			if (err) return next(err);
 			res.json(result);
 		});
 	},
 
-	
+
+
+	/**
+	 * Return information about the current user
+	 */
+
+	me: function(req, res, next) {
+		deezer.request(req.session.deezer.token,
+		{
+			resource: 'user/me',
+			method: 'get'
+		},
+		function done (err, result) {
+			if (err) return next(err);
+			res.json(result);
+		});
+	}
 };
