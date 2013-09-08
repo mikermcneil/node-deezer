@@ -55,9 +55,9 @@ module.exports = {
 		// Then return the ready-to-go URL:
 		return this.authenticationUrl +
 			'?' + querystringify({
-				app_id: appId,
-				redirect_uri: redirectUrl,
-				perms: perms
+				app_id			: appId,
+				redirect_uri	: redirectUrl,
+				perms			: perms
 			});
 	},
 
