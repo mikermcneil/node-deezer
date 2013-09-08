@@ -5,9 +5,10 @@
 var request			= require('request'),
 	_				= require('lodash'),
 	Err				= require('./errors'),
-	querystringify	= require('querystring').stringify,
+	querystring		= require('querystring'),
 	toCSV			= require('./util/toCSV'),
-	isHTTPMethod	= require('./util/isHTTPMethod');
+	isHTTPMethod	= require('./util/isHTTPMethod'),
+	util			= require('util');
 
 
 
@@ -56,7 +57,7 @@ module.exports = {
 		}
 
 		// Default `options.method` to HTTP GET and ensure that it is lowercased
-		if ( !isHttpVerb(options.method) ) {
+		if ( !isHTTPMethod(options.method) ) {
 			options.method = 'get';
 		}
 		options.method = options.method.toLowerCase();
@@ -64,7 +65,7 @@ module.exports = {
 
 		// Build request
 		var apiRequest = {
-			url		: this.endpoints.resource + '/' + options.resource,
+			url		: this.endpoints.resources + '/' + options.resource,
 			method	: options.method
 		};
 
@@ -91,7 +92,14 @@ module.exports = {
 			// Handle non-200 status codes & unexpected results
 			if (err) return cb(err);
 			var status = r.statusCode;
-			if (status !== 200 && body) return cb(body);
+			if (status !== 200 && body) {
+				// Attempt to parse error body as JSON
+				try {
+					body = JSON.parse(body);
+					return cb(body);
+				}
+				catch (e) { return cb(body); }
+			}
 			if (!body) return cb(Err.unknownResponseFromDeezer(r));
 			// NOTE: When an error API is documented for Deezer OAuth API calls,
 			// a more structured/semantic error response should be implemented here
@@ -99,7 +107,28 @@ module.exports = {
 			// Attempt to parse response body as form values
 			// (see example here: http://developers.deezer.com/api/oauth)			
 			var parsedResponse = querystring.parse(body);
-			if (!parsedResponse.access_token) return cb(body);
+			if (!parsedResponse.access_token) {
+				// If no access_token exists, this must be an error
+				// Attempt to parse error body as JSON
+				try {
+					body = JSON.parse(body);
+					if (body.error && body.error.message) {
+						return cb(body.error.message);
+					}
+				}
+				// if deezer sent invalid json
+				catch (e) {
+					return cb(
+						'Deezer sent a non-JSON response :: ' + '\n' +
+						util.inspect(body, false, 4)
+					);
+				}
+				// if deezer sent json, but it's in an unexpected format
+				return cb(
+					'Deezer sent an unexpected JSON response :: ' + '\n' +
+					util.inspect(body, false, 4)
+				);
+			}
 			
 			// Cast `expires` result to either `false` or a natural number ( > 0 )
 			// i.e. we'll allow the `expires` value to be missing from the response,
