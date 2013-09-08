@@ -16,8 +16,9 @@ module.exports = {
 
 	notCompatible: function (methodName) {
 		return new Error('\n' + 
-			'This method (`' + methodName + '`) ' +
-			'cannot be used on the server by Node.js.'
+			'This method (`' + methodName + '`) from Deezer\'s ' +
+			'client-side JavaScript SDK is not compatible with this library ' +
+			'because it cannot be used on the server by Node.js.'
 		);
 	},
 
