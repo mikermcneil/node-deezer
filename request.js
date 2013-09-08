@@ -8,6 +8,7 @@ var request			= require('request'),
 	querystring		= require('querystring'),
 	toCSV			= require('./util/toCSV'),
 	isHTTPMethod	= require('./util/isHTTPMethod'),
+	handleApiError	= require('./util/apiError'),
 	util			= require('util');
 
 
@@ -52,7 +53,7 @@ module.exports = {
 		}
 
 		// Default `options.fields` to {}
-		if ( typeof options.fields !== 'undefined' ) {
+		if ( !options.fields ) {
 			options.fields = {};
 		}
 
@@ -85,60 +86,46 @@ module.exports = {
 		// Build field set
 		apiRequest[paramEncoding] = options.fields;
 
+		// Always embed access_token as a parameter
+		apiRequest[paramEncoding].access_token = accessToken;
 
 		// Communicate w/ Deezer
-		request(apiRequest, function createSessionResponse (err, r, body) {
+		request(apiRequest, function apiResponse (err, r, body) {
 
-			// Handle non-200 status codes & unexpected results
+			// Catch API errors in a standardized way
+			err = handleApiError(err, r, body);
 			if (err) return cb(err);
-			var status = r.statusCode;
-			if (status !== 200 && body) {
-				// Attempt to parse error body as JSON
-				try {
-					body = JSON.parse(body);
-					return cb(body);
-				}
-				catch (e) { return cb(body); }
-			}
-			if (!body) return cb(Err.unknownResponseFromDeezer(r));
-			// NOTE: When an error API is documented for Deezer OAuth API calls,
-			// a more structured/semantic error response should be implemented here
 
 			// Attempt to parse response body as form values
 			// (see example here: http://developers.deezer.com/api/oauth)			
-			var parsedResponse = querystring.parse(body);
-			if (!parsedResponse.access_token) {
-				// If no access_token exists, this must be an error
-				// Attempt to parse error body as JSON
-				try {
-					body = JSON.parse(body);
-					if (body.error && body.error.message) {
-						return cb(body.error.message);
-					}
+			var parsedResponse;
+			try {
+				parsedResponse = JSON.parse(body);
+
+				// Handle structured Deezer error
+				if (parsedResponse.error && parsedResponse.error.message) {
+					return cb(parsedResponse.error.message);
 				}
-				// if deezer sent invalid json
-				catch (e) {
-					return cb(
-						'Deezer sent a non-JSON response :: ' + '\n' +
-						util.inspect(body, false, 4)
-					);
+
+				// Handle valid api response
+				if ( typeof parsedResponse.status !== 'undefined') {
+					return cb(null, parsedResponse);
 				}
-				// if deezer sent json, but it's in an unexpected format
+
+				// If deezer sent json, but it's in an unexpected format
 				return cb(
 					'Deezer sent an unexpected JSON response :: ' + '\n' +
 					util.inspect(body, false, 4)
 				);
 			}
+			// if deezer sent invalid json
+			catch (e) {
+				return cb(
+					'Deezer sent a non-JSON response :: ' + '\n' +
+					util.inspect(body, false, 4)
+				);
+			}			
 			
-			// Cast `expires` result to either `false` or a natural number ( > 0 )
-			// i.e. we'll allow the `expires` value to be missing from the response,
-			// but we assume that means the token *never* expires!
-			if (!parsedResponse.expires) parsedResponse.expires = false;
-			// NOTE: `expires` represents the number of seconds remaining before 
-			// the access token expires
-			
-			// Send back parsed response
-			cb(null, parsedResponse);
 		});
 	}
 

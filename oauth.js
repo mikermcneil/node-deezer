@@ -6,6 +6,7 @@ var request			= require('request'),
 	_				= require('lodash'),
 	querystring		= require('querystring'),
 	Err				= require('./errors'),
+	handleApiError	= require('./util/apiError'),
 	toCSV			= require('./util/toCSV');
 
 
@@ -102,13 +103,9 @@ module.exports = {
 			}
 		}, function createSessionResponse (err, r, body) {
 
-			// Handle non-200 status codes & unexpected results
+			// Catch API errors in a standardized way
+			err = handleApiError(err, r, body);
 			if (err) return cb(err);
-			var status = r.statusCode;
-			if (status !== 200 && body) return cb(body);
-			if (!body) return cb(Err.unknownResponseFromDeezer(r));
-			// NOTE: When an error API is documented for Deezer OAuth API calls,
-			// a more structured/semantic error response should be implemented here
 
 			// Attempt to parse response body as form values
 			// (see example here: http://developers.deezer.com/api/oauth)			
