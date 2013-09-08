@@ -19,3 +19,6 @@ nbproject
 *.swp
 *.swn
 *.swm
+
+# Examples (for now, to keep me from committing my credentials)
+examples
