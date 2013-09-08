@@ -21,6 +21,16 @@ var deezer = new DZ();
 
 describe('deezer#createSession()', function() {
 
+	describe('callback', function() {
+		it('should fire', function (cb) {
+			deezer.createSession('asddg4sgdagsd', '8j4ajdgkasdgjasdg', function (err) {
+				// Ignore error, since inputs are clearly invalid
+				// Instead validate that this callback fires at all
+				cb();
+			});
+		});
+	});
+
 
 	describe('proper behavior for invalid input', function() {
 

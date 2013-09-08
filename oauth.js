@@ -89,6 +89,8 @@ module.exports = {
 		}
 
 		this.endpoints.accessToken;
+
+		cb();
 	},
 	
 
