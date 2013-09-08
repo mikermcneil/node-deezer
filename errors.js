@@ -18,7 +18,9 @@ module.exports = {
 		return new Error('\n' + 
 			'This method (`' + methodName + '`) from Deezer\'s ' +
 			'client-side JavaScript SDK is not compatible with this library ' +
-			'because it cannot be used on the server by Node.js.'
+			'because it cannot be used on the server by Node.js.' + '\n' +
+			'For documentation on using this Node.js module, check out:' + '\n' + 
+			'https://github.com/mikermcneil/node-deezer'
 		);
 	},
 
