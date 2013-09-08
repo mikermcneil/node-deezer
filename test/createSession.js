@@ -29,6 +29,14 @@ describe('deezer#createSession()', function() {
 				cb();
 			});
 		});
+
+		it('should contain error when crazy, random inputs are used', function (cb) {
+			deezer.createSession('asddg4sgda$*(ADADGHADhagsd', '8j4ajdgkasdgjasaAFHOdg', 'asDdgasagsdsgd', function (err) {
+				// If there is no error, there is something wrong
+				if (!err) return cb(new Error('createSession() should have responded w/ an error!'));
+				cb();
+			});
+		});
 	});
 
 

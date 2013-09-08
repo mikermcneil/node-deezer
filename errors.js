@@ -36,6 +36,12 @@ module.exports = {
 			'Expected one of: ' + util.inspect(expectedTypes) + '\n' +
 			'But instead got: ' + util.inspect(actualValue) + '\n' +
 			'whose type is: ' + typeof(actualValue) );
+	},
+
+	unknownResponseFromDeezer: function (response) {
+		return new Error ('\n' +
+			'An unexpected response was returned from the Deezer API:' + '\n' +
+			response );
 	}
 
 };

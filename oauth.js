@@ -4,7 +4,7 @@
 
 var request			= require('request'),
 	_				= require('lodash'),
-	querystringify	= require('querystring').stringify,
+	querystring		= require('querystring'),
 	Err				= require('./errors'),
 	toCSV			= require('./util/toCSV');
 
@@ -53,7 +53,7 @@ module.exports = {
 		// is on board and cool w/ it and everything
 		// Then return the ready-to-go URL:
 		return this.endpoints.userAuth +
-			'?' + querystringify({
+			'?' + querystring.stringify({
 				app_id			: appId,
 				redirect_uri	: redirectUrl,
 				perms			: perms
@@ -100,8 +100,29 @@ module.exports = {
 				secret	: secret,
 				code	: code
 			}
+		}, function (err, r, body) {
+
+			// Handle non-200 status codes & unexpected results
+			if (err) return cb(err);
+			var status = r.statusCode;
+			if (status !== 200 && body) return cb(body);
+			if (!body) return cb(Err.unknownResponseFromDeezer(r));
+			// NOTE: When an error API is documented for Deezer OAuth API calls,
+			// a more structured/semantic error response should be implemented here
+
+			// Attempt to parse response body as form values
+			// (see example here: http://developers.deezer.com/api/oauth)			
+			var parsedResponse = querystring.parse(body);
+			if (!parsedResponse.access_token) return cb(body);
+			
+			// Cast `expires` result to either `false` or a natural number ( > 0 )
+			// i.e. we'll allow the `expires` value to be missing from the response,
+			// but we assume that means the token *never* expires!
+			if (!parsedResponse.expires) parsedResponse.expires = false;
+			
+			// Send back parsed response
+			cb(null, parsedResponse);
 		});
-		cb();
 	},
 	
 
