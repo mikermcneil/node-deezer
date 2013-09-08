@@ -4,7 +4,17 @@ node-deezer
 Unofficial Node.js wrapper for the Deezer API
 
 
-## Quickstart
+## Hello Deezer
+
+#### Installation
+First, install the npm module:
+`npm install node-deezer`
+
+#### Hello Deezer
+
+Here's a quick example to get you started:
+
+> For more, clone this repo and try out the [Express example](https://github.com/mikermcneil/node-deezer/tree/master/examples/with_express).
 
 ```javascript
 // Instantiate library (can be global or instantiated in separate places-- either way is fine)
@@ -66,6 +76,8 @@ if (!code) {
 }
 
 ```
+
+
 
 ## Methods
 
