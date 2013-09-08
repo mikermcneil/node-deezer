@@ -22,12 +22,18 @@ var deezer = new DZ();
  * (accessed via http://localhost:3000)
  */
 
-exports.me = function(req, res, next) {
-	deezer.request(req.session.deezer.token, {
-		resource: 'user/me',
-		method: 'get'
-	}, function (err, result) {
-		if (err) return next(err);
-		res.json(result);
-	});
+module.exports = {
+
+
+	me: function(req, res, next) {
+		deezer.request(req.session.deezer.token, {
+			resource: 'user/me',
+			method: 'get'
+		}, function (err, result) {
+			if (err) return next(err);
+			res.json(result);
+		});
+	},
+
+	
 };

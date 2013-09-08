@@ -62,7 +62,15 @@ app.get('/dashboard', routes.dashboard);
 // These are the endpoints in our app 
 // which proxy to the appropriate API methods
 // in the Deezer cloud
-app.get('/deezer/me', deezerApiRoutes.me);
+app.get('/deezer/:resource/:id?', function (req,res,next) {
+	
+	// Quick implementation of resourceful routing,
+	// just to simplify the demo
+	var resource = req.param('resource');
+	if (!resource) res.redirect('/dashboard');
+	if (!deezerApiRoutes[resource]) res.redirect('/dashboard');
+	deezerApiRoutes[resource](req,res,next);
+});
 
 
 
