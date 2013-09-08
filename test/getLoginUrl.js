@@ -26,6 +26,7 @@ describe('deezer#getLoginUrl()', function() {
 		it('should return a valid url', function () {
 			assert.doesNotThrow(function () {
 				var loginUrl = deezer.getLoginUrl(1234, 'localhost');
+				console.log(loginUrl);
 				check(loginUrl).isUrl();
 			});
 			assert.doesNotThrow(function () {

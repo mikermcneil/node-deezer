@@ -3,6 +3,7 @@
  */
 
 var _				= require('lodash'),
+	mapObj			= require('./util/mapObj'),
 	Request			= require('./request'),
 	OAuth			= require('./oauth'),
 	affordances		= require('./affordances');
@@ -29,14 +30,18 @@ function DZ (options) {
 	// (use case: e.g. future API versions)
 
 
-	// Main API endpoint URL
-	// Pulled from http://developers.deezer.com/api
-	this.apiEndpointUrl = 'https://api.deezer.com';
+	// Pulled from http://developers.deezer.com/api and http://developers.deezer.com/api/oauth
+	this.endpoints = {
 
+		// Base URL for accessing core Deezer resources as a particular user
+		resources: 'https://api.deezer.com',
 
-	// Main authentication endpoint for OAuth
-	// Pulled from http://developers.deezer.com/api/oauth
-	this.authenticationUrl = 'https://connect.deezer.com/oauth/auth.php';
+		// URL where user should be redirected to allow this app's access to the Deezer API
+		userAuth: 'https://connect.deezer.com/oauth/auth.php',
+
+		// URL where the access token for a user can be retrieved
+		accessToken: 'https://connect.deezer.com/oauth/access_token.php/'
+	};
 
 	
 	// Mixin OAuth methods
@@ -52,10 +57,10 @@ function DZ (options) {
 	 */
 
 	// Ensure that both URLs have no trailing slash
-	this.apiEndpointUrl.replace(/\/$/, '');
-	this.authenticationUrl.replace(/\/$/, '');
-
-
+	this.endpoints = mapObj(this.endpoints, function (url) {
+		return url.replace(/\/$/, '');
+	});
+	
 
 	/**
 	 * Apply usage affordances

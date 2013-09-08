@@ -52,7 +52,7 @@ module.exports = {
 		// to verify that the user whose account you'd like to access
 		// is on board and cool w/ it and everything
 		// Then return the ready-to-go URL:
-		return this.authenticationUrl +
+		return this.endpoints.userAuth +
 			'?' + querystringify({
 				app_id			: appId,
 				redirect_uri	: redirectUrl,
