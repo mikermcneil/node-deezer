@@ -119,6 +119,14 @@ module.exports = {
 			// i.e. we'll allow the `expires` value to be missing from the response,
 			// but we assume that means the token *never* expires!
 			if (!parsedResponse.expires) parsedResponse.expires = 0;
+			
+			// Trim whitespace
+			if (typeof parsedResponse.expires === 'string') {
+				parsedResponse.expires.replace(/\s*/g, '');
+			}
+			// Cast to number
+			parsedResponse.expires = +parsedResponse.expires;
+			
 			// NOTE: `expires` represents the number of seconds remaining before 
 			// the access token expires
 			
