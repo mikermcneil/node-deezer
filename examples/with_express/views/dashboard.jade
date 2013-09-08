@@ -1,10 +1,29 @@
 extends layout
 
 block content
-  h1 Example Dashboard
+  h2 Usage Examples
 
   ul
 
     li: a(href='/deezer/search/artist?q=eminem') Search for artists with "eminem" in their name
 
     li: a(href='/deezer/me') Get information on the currently logged-in user
+
+  div
+    h3 Want more?
+
+    p
+      span You can also access any of the API calls documented on 
+      a(href='developers.deezer.com') developers.deezer.com
+      span .  
+      
+      h5 For example:
+      strong: a(href='http://localhost:3000/deezer/search/artist?q=modest%20mouse') http://localhost:3000/deezer/search/artist?q=modest%20mouse
+      br
+      span or:
+      strong: a(href='http://localhost:3000/deezer/search/artist?q=death%20cab') http://localhost:3000/deezer/search/artist?q=death%20cab
+
+    form(action='/deezer/search/artist')
+      h5 Try your own artist search:
+      strong http://localhost:3000/deezer/search/artist/
+      input(value='foo' name='q')

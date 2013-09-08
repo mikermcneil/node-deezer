@@ -6,3 +6,7 @@ body {
 a {
   color: #00B7FF;
 }
+
+div {
+	margin: 2em 0 0 1em;
+}
