@@ -22,7 +22,12 @@ var _				= require('lodash'),
  * http://developers.deezer.com/api/explorer
  */
 
-function DZ () {
+function DZ (options) {
+
+	// TODO: *Enhancement*
+	// allow `options` argument to override core defaults (e.g. apiEndpointUrl)
+	// (use case: e.g. future API versions)
+
 
 	// Main API endpoint URL
 	// Pulled from http://developers.deezer.com/api
@@ -39,6 +44,7 @@ function DZ () {
 
 	// Mixin API request methods
 	_.extend(this, Request);
+
 
 
 	/**
