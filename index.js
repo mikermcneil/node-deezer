@@ -3,8 +3,10 @@
  */
 
 var request		= require('request'),
+	_			= require('lodash'),
 	Err			= require('./errors'),
-	affordances	= require('./affordances');
+	affordances	= require('./affordances'),
+	toCSV		= require('./util/toCSV');
 
 
 
@@ -39,20 +41,35 @@ function DZ () {
 	/**
 	 * Get the authentication url where your user should be redirected
 	 *
-	 * @param {String} appId		(your Deezer application id from the Deezer developer portal)
-	 * @param {String} callbackUrl	(URL which will handle the user's code from Deezer)
-	 *		NOTE: `callbackUrl` must be within the 'Application domain' specified for this app 
-	 *		in your Deezer developer portal at: http://developers.deezer.com/myapps
+	 * @param {String} appId			(your Deezer application id from the Deezer developer portal)
+	 * @param {String} callbackUrl		(URL which will handle the user's code from Deezer)
+	 * @param {Array|undefined} perms	(requested permissions [optional])
+	 *
+	 * NOTE: `callbackUrl` must be within the 'Application domain' specified for this app 
+	 * in your Deezer developer portal at: http://developers.deezer.com/myapps
 	 */
 
-	this.getLoginUrl = function (appId, callbackUrl) {
+	this.getLoginUrl = function (appId, callbackUrl, perms) {
 		if ( typeof appId !== 'string' && typeof appId !== 'number' ) {
 			throw Err.invalidArgument('appId', appId, ['string', 'number']);
 		}
 		if ( typeof callbackUrl !== 'string' ) {
 			throw Err.invalidArgument('callbackUrl', callbackUrl, ['string']);
 		}
-		return this.authenticationUrl + '/';
+		if ( !_.isArray(perms) && typeof perms !== 'undefined' ) {
+			throw Err.invalidArgument('perms', perms, ['Array', 'undefined']);
+		}
+
+		// If unspecified, basic_access is used by default
+		// (Deezer does this under the covers anyway)
+		if (!perms) perms = ['basic_access'];
+
+		// Reduce `perms` into a CSV
+		toCSV(perms);
+
+
+		// ?app_id=YOUR_APP_ID&redirect_uri=YOUR_REDIRECT_URI&perms=basic_access,email
+		return this.authenticationUrl + '/' ;
 	};
 
 
