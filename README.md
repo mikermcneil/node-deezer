@@ -44,8 +44,24 @@ if (!code) {
     // If an error occurs, we should handle it
     // (again, see express example for more)
   
-    // Otherwise, everything is cool and we have the access token and lifespan (`expires`) in `result`
+    // Otherwise, everything is cool and we have the access token and lifespan (`expires`)
+    // in `result.accessToken` and `result.expires`
     console.log(result);
+    
+    // Now we can do API requests!
+    
+    // e.g. search for artists with names containing the phrase 'empire'
+    deezer.request(result.accessToken,
+    {
+      resource: 'search/artist,
+      method: 'get',
+      fields: { q: 'empire' }
+    },
+    function done (err, results) {
+      if (err) throw err;
+      console.log(results);
+    });
+    
   });
 }
 
@@ -55,16 +71,22 @@ if (!code) {
 
 #### getLoginUrl
 
-
 ```javascript
-
+deezer.getLoginUrl(appId, redirectUrl);
 ```
 
 
 #### createSession
 
+```javascript
+deezer.getLoginUrl(appId, redirectUrl);
+```
+
 #### request
 
+```javascript
+deezer.request(appId, redirectUrl, cb);
+```
 
 ## To run the Express example
 
